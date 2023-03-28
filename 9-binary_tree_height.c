@@ -1,11 +1,11 @@
 #include "binary_trees.h"
 
 /**
- * find_max - find max between two numbers
- * @a: first number
- * @b: second number
+ * find_max - the max of 2 numbers
+ * @a: n1
+ * @b: n2
  *
- * Return: max
+ * Return: the macx of 2
  */
 int find_max(int a, int b)
 {
@@ -16,34 +16,30 @@ int find_max(int a, int b)
 }
 
 /**
- * find_height - finds the height of a tree
- * @tree: tree to find height of
+ * get_height - returns the eight of the tree
+ * @tree: to measure
  *
  * Return: height or 0
  */
-size_t find_height(const binary_tree_t *tree)
+size_t get_height(const binary_tree_t *tree)
 {
 	size_t height;
 
-	if (!tree)
+	if (tree == NULL)
 		return (0);
 
-	height = find_max(find_height(tree->left), find_height(tree->right));
+	height = find_max(get_height(tree->left), get_height(tree->right));
 
 	return (height + 1);
 }
 
-
 /**
- * binary_tree_height - finds the height of a binary_tree
- * @tree: pointer to root node
+ * binary_tree_height - finds the height of the tree
+ * @tree: to measure
  *
- * Return: height or 0 if tree is NULL
+ * Return: height or 0
  */
 size_t binary_tree_height(const binary_tree_t *tree)
 {
-	if (!tree)
-		return (0);
-
-	return (find_height(tree) - 1);
+	return (get_height(tree) - 1);
 }

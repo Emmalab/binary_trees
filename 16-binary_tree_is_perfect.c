@@ -1,78 +1,80 @@
 #include "binary_trees.h"
 
 /**
- * find_m - find max between two numbers
- * @a: first number
- * @b: second number
+ * binary_tree_is_leaf - checks if a tree is perfecttly filled
+ * @node: the root to start the check
  *
- * Return: max
+ * Return: 0 if null or imperfect
  */
-int find_m(int a, int b)
+int binary_tree_is_leaf(const binary_tree_t *node)
 {
-	if (a >= b)
-		return (a);
-	else
-		return (b);
+	int leaf = 0;
+
+	if (node && !(node->left) && !(node->right))
+		leaf = 1;
+
+	return (leaf);
 }
 
 /**
- * find_hgt - finds the height of a tree
- * @tree: tree to find height of
+ * binary_tree_is_parent_full - checks if a node is a parent
  *
- * Return: height or 0
+ * @node: pointer to the node to check
+ * Return: 1 if node is a parent, otherwise 0
  */
-size_t find_hgt(const binary_tree_t *tree)
+int binary_tree_is_parent_full(const binary_tree_t *node)
 {
-	size_t height;
+	int parent = 0;
 
-	if (!tree)
-		return (0);
+	if (node && node->left && node->right)
+		parent = 1;
 
-	height = find_m(find_hgt(tree->left), find_hgt(tree->right));
-
-	return (height + 1);
+	return (parent);
 }
 
 /**
- * count - counts nodes in a binary tree
- * @tree: the tree
+ * height - measures the height of a tree
  *
- * Return: number of nodes
+ * @tree: tree root
+ * Return: height
  */
-int count(const binary_tree_t *tree)
+int height(const binary_tree_t *tree)
 {
-	if (!tree)
-		return (0);
+	int left = 0;
+	int right = 0;
 
-	return (1 + count(tree->left) + count(tree->right));
+	if (tree == NULL)
+		return (-1);
+
+	left = height(tree->left);
+	right = height(tree->right);
+
+	if (left > right)
+		return (left + 1);
+
+	return (right + 1);
 }
 
 /**
  * binary_tree_is_perfect - checks if a binary tree is perfect
- * @tree: the tree
  *
- * Return: 1 if true and 0 if false
+ * @tree: tree root
+ * Return: 1 if tree is perfect, 0 otherwise
  */
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
-	int levels, tree_nodes, p_nodes = 1;
-
-	if (!tree)
-		return (0);
-
-	levels = find_hgt(tree);
-
-	while (levels != 0)
+	if (tree && height(tree->left) == height(tree->right))
 	{
-		p_nodes *= 2;
-		levels--;
+		if (height(tree->left) == -1)
+			return (1);
+
+		if (binary_tree_is_leaf(tree->left) && binary_tree_is_leaf(tree->right))
+			return (1);
+
+		if (binary_tree_is_parent_full(tree))
+			return (binary_tree_is_perfect(tree->left) &&
+				binary_tree_is_perfect(tree->right));
 	}
 
-	p_nodes -= 1;
-	tree_nodes = count(tree);
-
-	if (tree_nodes == p_nodes)
-		return (1);
-	else
-		return (0);
+	return (0);
 }
